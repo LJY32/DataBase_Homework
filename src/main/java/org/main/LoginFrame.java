@@ -63,7 +63,7 @@ public class LoginFrame extends JFrame {
                 String storedPassword = rs.getString("password");
                 if (password.equals(storedPassword)) {
                     JOptionPane.showMessageDialog(this, "登录成功！");
-                    System.out.println("登陆成功，关闭窗口");
+                    SwingUtilities.invokeLater(() -> new ModeChooseFrame()); //进入模式选择窗口
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "密码错误！");
