@@ -3,14 +3,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Registration extends JFrame {
     static String url = "jdbc:mysql://10.180.244.10:33306/Homework";
-    static String user = "guest";
+    static String user = "root";
     static String passwordDB = "12345678";
     private JPanel mainPanel;
     private JRadioButton studentRadioButton,teacherRadioButton; //身份选择
-    private JTextField studentIdField,nameField,passwdField,subjectField; //输入框
+    private JTextField studentIdField,nameField; //输入框
+    private  JPasswordField passwdField,passwd2Field;
     private JComboBox<String> genderComboBox;
     private JButton registerButton,backButton; //按钮
 
@@ -71,7 +76,7 @@ public class Registration extends JFrame {
         nameField = new JTextField(20);
         mainPanel.add(nameField, gbc);
 
-        // 姓名
+        // 密码
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -81,23 +86,21 @@ public class Registration extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
-        passwdField = new JTextField(20);
+        passwdField = new JPasswordField(20);
         mainPanel.add(passwdField, gbc);
 
-        // 任教科目（仅老师）
+        // 确认密码
         gbc.gridx = 0;
         gbc.gridy = 5;
-        gbc.gridwidth = 3;
-        JLabel subjectLabel = new JLabel("任教科目:");
-        subjectLabel.setVisible(false);
-        mainPanel.add(subjectLabel, gbc);
+        gbc.gridwidth = 1;
+        JLabel passwd2Label = new JLabel("确认密码:");
+        mainPanel.add(passwd2Label, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 5;
-        gbc.gridwidth = 3;
-        subjectField = new JTextField(20);
-        subjectField.setVisible(false);
-        mainPanel.add(subjectField, gbc);
+        gbc.gridwidth = 2;
+        passwd2Field = new JPasswordField(20);
+        mainPanel.add(passwd2Field, gbc);
 
         // 性别
         gbc.gridx = 0;
@@ -115,7 +118,7 @@ public class Registration extends JFrame {
 
         // 注册按钮
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.EAST;
         registerButton = new JButton("注册");
@@ -123,7 +126,7 @@ public class Registration extends JFrame {
 
         // 返回按钮
         gbc.gridx = 2;
-        gbc.gridy = 8;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         backButton = new JButton("返回登录界面");
         mainPanel.add(backButton, gbc);
@@ -133,8 +136,6 @@ public class Registration extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 studentIdField.setVisible(true);
-                subjectLabel.setVisible(false);
-                subjectField.setVisible(false);
                 studentIdField.requestFocus();
                 studentIdField.setText("");
             }
@@ -144,10 +145,7 @@ public class Registration extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 studentIdField.setVisible(true);
-                subjectLabel.setVisible(true);
-                subjectField.setVisible(true);
                 studentIdField.requestFocus();
-                subjectField.setText("");
             }
         });
 
@@ -157,18 +155,24 @@ public class Registration extends JFrame {
                 String role = studentRadioButton.isSelected() ? "学生" : "老师";
                 String id = studentIdField.getText();
                 String name = nameField.getText();
+                String passwd = passwdField.getText();
+                String passwdConfirm = passwd2Field.getText();
                 String gender = (String) genderComboBox.getSelectedItem();
-                String subject = teacherRadioButton.isSelected() ? subjectField.getText() : "";
-
-                if (id.isEmpty() || name.isEmpty() || gender.isEmpty()) {
+                int usertype;
+                if (id.isEmpty() || name.isEmpty() || gender.isEmpty() || passwd.isEmpty() || !studentRadioButton.isSelected())
                     JOptionPane.showMessageDialog(null, "请填写完整信息！");
-                } else {
-                    // 注册成功
-                    // 待会写一个发送数据到数据库
-                    JOptionPane.showMessageDialog(null, role + " " + name + " 注册成功！");
-                    // 返回登录界面
-                    SwingUtilities.invokeLater(() -> new LoginFrame());
-                    dispose();
+                else {
+                    if (!passwd.equals(passwdConfirm))
+                        JOptionPane.showMessageDialog(null, "两次输入密码不相同！");
+                    else {
+                        if (role == "学生") usertype = 1;
+                        else usertype = 0;
+                        sendData(name, passwd, usertype);
+                        JOptionPane.showMessageDialog(null, role + " " + name + " 注册成功！");
+                        // 返回登录界面
+                        SwingUtilities.invokeLater(() -> new LoginFrame());
+                        dispose();
+                    }
                 }
             }
         });
@@ -182,7 +186,20 @@ public class Registration extends JFrame {
         });
         add(mainPanel);
     }
-    private void sendData(){
+    private static void sendData(String username,String password, int usertype){
+        String sql = "INSERT INTO users (username, password, usertype) VALUES (?, ?, ?)";
 
+        try (Connection conn = DriverManager.getConnection(url, user, passwordDB);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            pstmt.setInt(3,usertype);
+
+            pstmt.executeUpdate();
+            System.out.printf("注册成功！\n用户名：%s\n用户类型：%d",username,usertype);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
