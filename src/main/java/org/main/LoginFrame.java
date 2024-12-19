@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class LoginFrame extends JFrame {
     static String url = "jdbc:mysql://10.180.244.10:33306/Homework";
-    static String user = "root";
+    static String user = "guest";
     static String passwordDB = "12345678";
     private JTextField usernameField;
     private JPasswordField passwordField; //这个输入框可以让密码变成点点点
@@ -26,7 +26,7 @@ public class LoginFrame extends JFrame {
         usernameField = new JTextField();
         passwordField = new JPasswordField();
         loginButton = new JButton("登录");
-        quitButton = new JButton("退出");
+        quitButton = new JButton("注册");
 
         add(usernameLabel);
         add(usernameField);
@@ -42,12 +42,13 @@ public class LoginFrame extends JFrame {
         });
         quitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                quit();
+                register();
             }
         });
         setVisible(true);
     }
-    private void quit(){
+    private void register(){
+        SwingUtilities.invokeLater(() -> new Registration().setVisible(true));
         dispose();
     }
     private void login() {
