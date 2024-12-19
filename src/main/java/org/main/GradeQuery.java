@@ -10,7 +10,7 @@ public class GradeQuery extends JFrame {
     private JTable gradeTable;
     private DefaultTableModel tableModel;
 
-    public GradeQuery(String stud_name) {
+    public GradeQuery(int stud_name) {
         setTitle("成绩查询");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +39,7 @@ public class GradeQuery extends JFrame {
         add(panel);
     }
 
-    private void queryGrades(String name) {
+    private void queryGrades(int userId) {
         String url = "jdbc:mysql://10.180.244.10:33306/Homework";
         String user = "root";
         String password = "12345678";
@@ -55,22 +55,9 @@ public class GradeQuery extends JFrame {
             // 创建Statement对象
             stmt = conn.createStatement();
 
-            // 查询user_id
-            String queryUserId = "SELECT user_id FROM students WHERE student_name = ?";
-            PreparedStatement pstmt = conn.prepareStatement(queryUserId);
-            pstmt.setString(1, name);
-            rs = pstmt.executeQuery();
-
-            int userId = -1;
-            if (rs.next()) {
-                userId = rs.getInt("user_id");
-            } else {
-                JOptionPane.showMessageDialog(this, "未找到该学生！");
-                return;
-            }
-
             // 查询成绩
             String queryGrades = "SELECT stud_course_id, stud_course_grade FROM stud_grade WHERE stud_id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(queryGrades);
             pstmt = conn.prepareStatement(queryGrades);
             pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
