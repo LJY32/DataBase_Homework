@@ -14,9 +14,8 @@ public class Registration extends JFrame {
     static String passwordDB = "12345678";
     private JPanel mainPanel;
     private JRadioButton studentRadioButton,teacherRadioButton; //身份选择
-    private JTextField studentIdField,nameField; //输入框
+    private JTextField nameField; //输入框
     private  JPasswordField passwdField,passwd2Field;
-    private JComboBox<String> genderComboBox;
     private JButton registerButton,backButton; //按钮
 
     public Registration() {
@@ -50,75 +49,48 @@ public class Registration extends JFrame {
         gbc.gridx = 2;
         mainPanel.add(teacherRadioButton, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 3;
-        JLabel idLabel = new JLabel("学工号:");
-        mainPanel.add(idLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 3;
-        studentIdField = new JTextField(20);
-        studentIdField.setVisible(true);
-        mainPanel.add(studentIdField, gbc);
-
         // 姓名
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 1;
         gbc.gridwidth = 1;
         JLabel nameLabel = new JLabel("姓名:");
         mainPanel.add(nameLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
         nameField = new JTextField(20);
         mainPanel.add(nameField, gbc);
 
         // 密码
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         JLabel passwdLabel = new JLabel("密码:");
         mainPanel.add(passwdLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         passwdField = new JPasswordField(20);
         mainPanel.add(passwdField, gbc);
 
         // 确认密码
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         gbc.gridwidth = 1;
         JLabel passwd2Label = new JLabel("确认密码:");
         mainPanel.add(passwd2Label, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         passwd2Field = new JPasswordField(20);
         mainPanel.add(passwd2Field, gbc);
 
-        // 性别
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 1;
-        JLabel genderLabel = new JLabel("性别:");
-        mainPanel.add(genderLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        gbc.gridwidth = 2;
-        String[] genderOptions = {"男", "女"};
-        genderComboBox = new JComboBox<>(genderOptions);
-        mainPanel.add(genderComboBox, gbc);
-
         // 注册按钮
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.EAST;
         registerButton = new JButton("注册");
@@ -126,40 +98,21 @@ public class Registration extends JFrame {
 
         // 返回按钮
         gbc.gridx = 2;
-        gbc.gridy = 7;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         backButton = new JButton("返回登录界面");
         mainPanel.add(backButton, gbc);
 
-        // 添加事件监听器
-        studentRadioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                studentIdField.setVisible(true);
-                studentIdField.requestFocus();
-                studentIdField.setText("");
-            }
-        });
-
-        teacherRadioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                studentIdField.setVisible(true);
-                studentIdField.requestFocus();
-            }
-        });
 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String role = studentRadioButton.isSelected() ? "学生" : "老师";
-                String id = studentIdField.getText();
                 String name = nameField.getText();
                 String passwd = passwdField.getText();
                 String passwdConfirm = passwd2Field.getText();
-                String gender = (String) genderComboBox.getSelectedItem();
                 int usertype;
-                if (id.isEmpty() || name.isEmpty() || gender.isEmpty() || passwd.isEmpty() || !studentRadioButton.isSelected())
+                if (name.isEmpty() || passwd.isEmpty() || !studentRadioButton.isSelected())
                     JOptionPane.showMessageDialog(null, "请填写完整信息！");
                 else {
                     if (!passwd.equals(passwdConfirm))
