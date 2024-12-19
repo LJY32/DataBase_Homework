@@ -4,10 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ModeChooseFrame extends JFrame{
-    private JButton controlButton,queryButton,quitButton;
+public class StudentModeFrame extends JFrame{
+    private JButton queryButton,quitButton;
 
-    public ModeChooseFrame() {
+    public StudentModeFrame() {
         setTitle("功能选择");
         setSize(300, 200);
         setLocationRelativeTo(null);

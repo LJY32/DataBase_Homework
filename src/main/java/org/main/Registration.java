@@ -112,7 +112,7 @@ public class Registration extends JFrame {
                 String passwd = passwdField.getText();
                 String passwdConfirm = passwd2Field.getText();
                 int usertype;
-                if (name.isEmpty() || passwd.isEmpty() || !studentRadioButton.isSelected())
+                if (name.isEmpty() || passwd.isEmpty() )
                     JOptionPane.showMessageDialog(null, "请填写完整信息！");
                 else {
                     if (!passwd.equals(passwdConfirm))

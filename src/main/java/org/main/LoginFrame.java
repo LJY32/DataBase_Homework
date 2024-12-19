@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class LoginFrame extends JFrame {
     static String url = "jdbc:mysql://10.180.244.10:33306/Homework";
-    static String user = "guest";
+    static String user = "root";
     static String passwordDB = "12345678";
     private JTextField usernameField;
     private JPasswordField passwordField; //这个输入框可以让密码变成点点点
@@ -64,7 +64,13 @@ public class LoginFrame extends JFrame {
                 String storedPassword = rs.getString("password");
                 if (password.equals(storedPassword)) {
                     JOptionPane.showMessageDialog(this, "登录成功！");
-                    SwingUtilities.invokeLater(() -> new ModeChooseFrame()); //进入模式选择窗口
+                    int usertype = rs.getInt("usertype");
+                    if(usertype == 0)
+                        SwingUtilities.invokeLater(() -> new StudentModeFrame()); //进入老师选择窗口
+                    else if (usertype == 1)
+                        SwingUtilities.invokeLater(() -> new StudentModeFrame()); //进入学生选择窗口
+                    else
+                        JOptionPane.showMessageDialog(this, "服务器内部错误！");
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "密码错误！");
