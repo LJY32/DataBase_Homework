@@ -66,9 +66,9 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, "登录成功！");
                     int usertype = rs.getInt("usertype");
                     if(usertype == 0)
-                        SwingUtilities.invokeLater(() -> new StudentModeFrame()); //进入老师选择窗口
+                        SwingUtilities.invokeLater(() -> new StudentModeFrame(username)); //进入老师选择窗口
                     else if (usertype == 1)
-                        SwingUtilities.invokeLater(() -> new StudentModeFrame()); //进入学生选择窗口
+                        SwingUtilities.invokeLater(() -> new StudentModeFrame(username)); //进入学生选择窗口
                     else
                         JOptionPane.showMessageDialog(this, "服务器内部错误！");
                     dispose();

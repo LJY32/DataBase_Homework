@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 
 public class StudentModeFrame extends JFrame{
     private JButton queryButton,quitButton;
+    private String stud_name;
 
-    public StudentModeFrame() {
+    public StudentModeFrame(String stud_name) {
+        this.stud_name = stud_name;
         setTitle("功能选择");
         setSize(300, 200);
         setLocationRelativeTo(null);
@@ -31,7 +33,7 @@ public class StudentModeFrame extends JFrame{
         setVisible(true);
     }
     private void query(){
-        //明天再写
+        new GradeQuery(stud_name).setVisible(true);
         dispose();
     }
     private void quit(){
