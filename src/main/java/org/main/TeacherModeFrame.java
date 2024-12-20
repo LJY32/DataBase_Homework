@@ -25,7 +25,7 @@ public class TeacherModeFrame extends JFrame{
 
         queryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                query();
+                score();
             }
         });
         chooseButton.addActionListener(new ActionListener() {
@@ -64,8 +64,8 @@ public class TeacherModeFrame extends JFrame{
         }
     }
 
-    private void query(){
-        new GradeQuery(getTeacID()).setVisible(true);
+    private void score(){
+        new TeacherScore(getTeacID()).setVisible(true);
         dispose();
     }
     private void courseSelector(){
