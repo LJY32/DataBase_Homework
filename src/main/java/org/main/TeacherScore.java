@@ -62,6 +62,7 @@ public class TeacherScore extends JFrame {
             String user = "root";
             String password = "12345678";
             connection = DriverManager.getConnection(url, user, password);
+            loadCoursesAndStudents();
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "数据库连接失败：" + ex.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
@@ -72,7 +73,7 @@ public class TeacherScore extends JFrame {
     private void loadCoursesAndStudents() {
         String teacherId = String.valueOf(teacher_id);
         if (teacherId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请输入有效的教师ID", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "教师ID出错", "错误", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
